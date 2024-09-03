@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 
 const app = express()
 app.use(express.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 let courses = [
     {
