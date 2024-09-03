@@ -13,11 +13,11 @@
         <label for="category">Category:</label>
         <input type="text" id="category" name="category" required><br><br>
 
-        <label for="preparationTime">Preparation Time:</label>
-        <input type="text" id="preparationTime" name="preparationTime" required><br><br>
+      <label for="instructor">Preparation Time:</label>
+        <input type="text" id="instructor" name="instructor" ><br>
 
-        <label for="cookingTime">Cooking Time:</label>
-        <input type="number" id="cookingTime" name="cookingTime" required><br><br>
+        <label for="duration">Cooking Time:</label>
+        <input type="number" id="duration" name="duration" ><br>
         <input type="submit" value="Submit">
     </form>
     <div id="display"></div>
@@ -71,8 +71,8 @@
             const data = {
                 name: document.getElementById('name').value,
                 category: document.getElementById('category').value,
-                preparationTime: document.getElementById('preparationTime').value,
-                cookingTime: document.getElementById('cookingTime').value,
+                instructor: document.getElementById('instructor').value,
+                duration: document.getElementById('duration').value,
             };
             postData(data);
         };
@@ -103,8 +103,8 @@
                     const updatedData = {
                         name: prompt("Enter new name", ele.name),
                         category: prompt("Enter new category", ele.category),
-                        preparationTime: prompt("Enter new preparation time", ele.preparationTime),
-                        cookingTime: prompt("Enter new cooking time", ele.cookingTime),
+                        instructor: prompt("Enter new preparation time", ele.instructor),
+                        duration: prompt("Enter new cooking time", ele.duration),
                     };
                     updateData(ele.id, updatedData);
                 });
