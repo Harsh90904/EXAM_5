@@ -1,126 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
+    <title>Course Form</title>
+</head>
+<body>
     <form action="" method="post" id="taskData">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required><br><br>
 
-        <label for="category">category:</label>
+        <label for="category">Category:</label>
         <input type="text" id="category" name="category" required><br><br>
 
-        <label for="instructor">Preparation Time:</label>
-        <input type="text" id="instructor" name="instructor" required><br><br>
+        <label for="preparationTime">Preparation Time:</label>
+        <input type="text" id="preparationTime" name="preparationTime" required><br><br>
 
-        <label for="duration">Cooking Time:</label>
-        <input type="number" id="duration" name="duration" required><br><br>
+        <label for="cookingTime">Cooking Time:</label>
+        <input type="number" id="cookingTime" name="cookingTime" required><br><br>
         <input type="submit" value="Submit">
     </form>
     <div id="display"></div>
 
     <script>
-      const postData = async (data) => {
-        let req = await fetch("http://localhost:8090/recipe/all", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data)
-        });
-        let response = await req.json();
-        console.log(response);
-        mapper(response);
-      };
-
-      const updateData = async (id, data) => {
-        let req = await fetch(`http://localhost:8090/recipe/${id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data)
-        });
-        let response = await req.json();
-        console.log(response);
-        mapper(response);
-      };
-
-      const deleteData = async (id) => {
-        let req = await fetch(`http://localhost:8090/recipe/${id}`, {
-          method: "DELETE"
-        });
-        let response = await req.json();
-        console.log(response);
-        mapper(response);
-      };
-
-      const handleData = (e) => {
-        e.preventDefault();
-        let data = {
-            name: document.getElementById('name').value,
-            category: document.getElementById('category').value,
-            instructor: document.getElementById('instructor').value + ' minutes',
-            duration: document.getElementById('duration').value + ' minutes',
-            imageUrl: document.getElementById('imageUrl').value,
-            country: document.getElementById('country').value,
-            veg: document.querySelector('input[name="veg"]:checked').value === "Yes"
+        const postData = (data) => {
+            fetch("http://localhost:8090/courses/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(responseData => {
+                console.log(responseData);
+                mapper(responseData);
+            })
         };
-        postData(data);
-      };
 
-      document.getElementById("taskData").addEventListener("submit", handleData);
+        const updateData = (id, data) => {
+            fetch(`http://localhost:8090/courses/update/${id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(responseData => {
+                console.log(responseData);
+                mapper(responseData);
+            })
+           
+        };
 
-      const mapper = (data) => {
-        document.getElementById("display").innerHTML = "";
+        const deleteData = (id) => {
+            fetch(`http://localhost:8090/courses/delete/${id}`, {
+                method: "DELETE"
+            })
+            .then(response => response.json())
+            .then(responseData => {
+                console.log(responseData);
+                mapper(responseData);
+            })
+           
+        };
 
-        data.map((ele) => {
-          let h1 = document.createElement("h1");
-          h1.innerHTML = ele.name;
-          let h2 = document.createElement("h2");
-          h2.innerHTML = ele.category;
-          let h3 = document.createElement("h3");
-          h3.innerHTML = ele.instructor;
-          let p = document.createElement("p");
-          p.innerHTML = ele.duration;
-          let img = document.createElement("img");
-          img.src = ele.imageUrl;
-          let span = document.createElement("span");
-          span.innerHTML = ele.country;
-          let pa = document.createElement("p");
-          pa.innerHTML = ele.veg ? "Vegetarian" : "Non-Vegetarian";
-          let div = document.createElement("div");
-
-          // Create Delete and Update buttons
-          let deletebtn = document.createElement("button");
-          deletebtn.innerHTML = "Delete";
-          deletebtn.addEventListener("click", () => deleteData(ele.id));
-
-          let updatebtn = document.createElement("button");
-          updatebtn.innerHTML = "Update";
-          updatebtn.addEventListener("click", () => {
-            const updatedData = {
-              name: prompt("Enter new name", ele.name),
-              category: prompt("Enter new category", ele.category),
-              instructor: prompt("Enter new preparation time", ele.instructor),
-              duration: prompt("Enter new cooking time", ele.duration),
-              imageUrl: prompt("Enter new image URL", ele.imageUrl),
-              country: prompt("Enter new country", ele.country),
-              veg: confirm("Is Vegetarian?") ? true : false
+        const handleData = (e) => {
+            e.preventDefault();
+            const data = {
+                name: document.getElementById('name').value,
+                category: document.getElementById('category').value,
+                preparationTime: document.getElementById('preparationTime').value,
+                cookingTime: document.getElementById('cookingTime').value,
             };
-            updateData(ele.id, updatedData);
-          });
+            postData(data);
+        };
 
-          div.append(h1, h2, h3, p, img, span, pa, deletebtn, updatebtn);
+        document.getElementById("taskData").addEventListener("submit", handleData);
 
-          document.getElementById("display").append(div);
-        });
-      };
+        const mapper = (data) => {
+            document.getElementById("display").innerHTML = "";
 
-      dis();
+            data.forEach(ele => {
+                const h1 = document.createElement("h1");
+                h1.textContent = ele.name;
+                const h2 = document.createElement("h2");
+                h2.textContent = ele.category;
+                const h3 = document.createElement("h3");
+                h3.textContent = `Preparation Time: ${ele.preparationTime}`;
+                const p = document.createElement("p");
+                p.textContent = `Cooking Time: ${ele.cookingTime}`;
+                const div = document.createElement("div");
+
+                const deletebtn = document.createElement("button");
+                deletebtn.textContent = "Delete";
+                deletebtn.addEventListener("click", () => deleteData(ele.id));
+
+                const updatebtn = document.createElement("button");
+                updatebtn.textContent = "Update";
+                updatebtn.addEventListener("click", () => {
+                    const updatedData = {
+                        name: prompt("Enter new name", ele.name),
+                        category: prompt("Enter new category", ele.category),
+                        preparationTime: prompt("Enter new preparation time", ele.preparationTime),
+                        cookingTime: prompt("Enter new cooking time", ele.cookingTime),
+                    };
+                    updateData(ele.id, updatedData);
+                });
+
+                div.append(h1, h2, h3, p, deletebtn, updatebtn);
+                document.getElementById("display").appendChild(div);
+            });
+        };
     </script>
-  </body>
+</body>
 </html>
