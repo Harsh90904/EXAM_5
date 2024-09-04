@@ -27,31 +27,15 @@ app.post('/courses/add', (req, res) => {
 app.patch('/courses/update/:id', (req, res) => {
   const { id } = req.params;
   const updatedRecipe = req.body;
-  courses = courses.map(recipe => recipe.id === Number(id) ? { ...recipe, ...updatedRecipe } : recipe);
+  courses = courses.map(recipe => recipe.id === (id) ? { ...recipe, ...updatedRecipe } : recipe);
   res.send(courses);
 })
 
 app.delete('/courses/delete/:id', (req, res) => {
   const { id } = req.params;
-  courses = courses.filter(recipe => recipe.id !== Number(id));
+  courses = courses.filter(recipe => recipe.id !== (id));
   res.send(courses);
 })
-app.get('/courses/filter', (req, res) => {
-    const { category, instructor, duration } = req.query;
-    let filteredCourses = courses;
-  
-    if (category) {
-      filteredCourses = filteredCourses.filter(course => course.category.toLowerCase() === category.toLowerCase());
-    }
-    if (instructor) {
-      filteredCourses = filteredCourses.filter(course => course.instructor.toLowerCase() === instructor.toLowerCase());
-    }
-    if (duration) {
-      filteredCourses = filteredCourses.filter(course => course.duration === Number(duration));
-    }
-  
-    res.send(filteredCourses);
-  });
 app.listen(8090, () => {
   console.log('Server is running on port 8090')
 })
